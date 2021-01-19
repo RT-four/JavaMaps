@@ -7,9 +7,15 @@ import java.util.Scanner;
 public class Main {
 
     private static Map<Integer, Location> locations = new HashMap<>();
+    private static Map<String, String> commands = new HashMap<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        commands.put("east", "E");
+        commands.put("west", "W");
+        commands.put("north", "N");
+        commands.put("south", "S");
+
         locations.put(0, new Location(0, "You are sitting in front of a computer learning Java"));
         locations.put(1, new Location(1, "You are standing at the end of a road before a small brick building"));
         locations.put(2, new Location(2, "You are at the top of a hill"));
@@ -39,13 +45,23 @@ public class Main {
             if (loc == 0) {
                 break;
             }
+
             Map<String, Integer> exits = locations.get(loc).getExits();
             System.out.println("Available exits are ");
+
             for (String exit : exits.keySet()) {
                 System.out.print(exit + ", ");
             }
             System.out.println();
-            String direction = scanner.nextLine().toUpperCase();
+
+            String direction = scanner.nextLine();
+            String[] naturalCommand = direction.split(" ");
+
+            for (String s : naturalCommand) {
+                if (commands.containsKey(s.toLowerCase())) {
+                    direction = commands.get(s);
+                }
+            }
 
             if (exits.containsKey(direction)) {
                 loc = exits.get(direction);
