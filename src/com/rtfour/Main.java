@@ -7,14 +7,9 @@ import java.util.Scanner;
 public class Main {
 
     private static Map<Integer, Location> locations = new HashMap<>();
-    private static Map<String, String> commands = new HashMap<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        commands.put("east", "E");
-        commands.put("west", "W");
-        commands.put("north", "N");
-        commands.put("south", "S");
 
         locations.put(0, new Location(0, "You are sitting in front of a computer learning Java"));
         locations.put(1, new Location(1, "You are standing at the end of a road before a small brick building"));
@@ -38,6 +33,11 @@ public class Main {
         locations.get(5).addExit("S", 1);
         locations.get(5).addExit("W", 2);
 
+        Map<String, String> vocabulary = new HashMap<>();
+        vocabulary.put("EAST", "E");
+        vocabulary.put("WEST", "W");
+        vocabulary.put("NORTH", "N");
+        vocabulary.put("SOUTH", "S");
 
         int loc = 1;
         while (true) {
@@ -48,21 +48,21 @@ public class Main {
 
             Map<String, Integer> exits = locations.get(loc).getExits();
             System.out.println("Available exits are ");
-
             for (String exit : exits.keySet()) {
                 System.out.print(exit + ", ");
             }
             System.out.println();
 
-            String direction = scanner.nextLine();
-            String[] naturalCommand = direction.split(" ");
-
-            for (String s : naturalCommand) {
-                if (commands.containsKey(s.toLowerCase())) {
-                    direction = commands.get(s);
+            String direction = scanner.nextLine().toUpperCase();
+            if (direction.length() > 1) {
+                String[] words = direction.split(" ");
+                for (String word : words) {
+                    if (vocabulary.containsKey(word)) {
+                        direction = vocabulary.get(word);
+                        break;
+                    }
                 }
             }
-
             if (exits.containsKey(direction)) {
                 loc = exits.get(direction);
             } else {
